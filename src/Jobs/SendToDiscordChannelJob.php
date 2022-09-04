@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Spatie\DiscordAlerts\Types\Message;
 
 class SendToDiscordChannelJob implements ShouldQueue
 {
@@ -22,7 +23,7 @@ class SendToDiscordChannelJob implements ShouldQueue
     public int $maxExceptions = 3;
 
     public function __construct(
-        public string $text,
+        public Message $message,
         public string $webhookUrl
     ) {
     }
@@ -30,9 +31,9 @@ class SendToDiscordChannelJob implements ShouldQueue
     public function handle(): void
     {
         $payload = [
-            'content' => $this->text,
+            'content' => (string) $this->message,
         ];
 
-        Http::post($this->webhookUrl, $payload);
+        Http::withHeaders($this->message->getHeaders())->post($this->webhookUrl, $payload);
     }
 }

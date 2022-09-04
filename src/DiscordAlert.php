@@ -2,9 +2,15 @@
 
 namespace Spatie\DiscordAlerts;
 
+use Illuminate\Http\Exceptions\PostTooLargeException;
+use PhpParser\Node\Expr\AssignOp\Mul;
+use Spatie\DiscordAlerts\Types\Multipart;
+use Spatie\DiscordAlerts\Types\Text;
+
 class DiscordAlert
 {
     protected string $webhookUrlName = 'default';
+    protected array $embeds = [];
 
     public function to(string $webhookUrlName): self
     {
@@ -13,12 +19,34 @@ class DiscordAlert
         return $this;
     }
 
+    public function embed(...$embeds): self
+    {
+        foreach ($embeds as $embed) {
+            if (count($this->embeds) >= 10) {
+                throw new PostTooLargeException('You can only have 10 embeds per message.');
+            }
+
+            $this->embeds[] = $embed;
+        }
+
+        return $this;
+    }
+
     public function message(string $text): void
     {
         $webhookUrl = Config::getWebhookUrl($this->webhookUrlName);
 
+        if (empty($this->embed)) {
+            $message = (new Text())
+                ->add(['content' => $text]);
+        } else {
+            $message = (new Multipart())
+                ->add(['content' => $text])
+                ->add($this->embeds);
+        }
+
         $jobArguments = [
-            'text' => $text,
+            'message' => $message,
             'webhookUrl' => $webhookUrl,
         ];
 
