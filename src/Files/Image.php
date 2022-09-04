@@ -16,13 +16,23 @@ class Image implements File
         return pathinfo($this->filePath, PATHINFO_FILENAME) . '.' . pathinfo($this->filePath, PATHINFO_EXTENSION);
     }
 
-    public function __toString(): string
-    {
-        return base64_encode(file_get_contents($this->filePath));
-    }
-
     public function getMimeType(): string
     {
         return mimetype_from_filename($this->filePath);
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'title' => $this->getFilename(),
+            'image' => [
+                'url' => sprintf('attachment://%s', $this->getFilename())
+            ]
+        ];
+    }
+
+    public function __toString(): string
+    {
+        return base64_encode(file_get_contents($this->filePath));
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Spatie\DiscordAlerts\Files;
 
-interface File extends \Stringable
+use Illuminate\Contracts\Support\Arrayable;
+
+interface File extends \Stringable, Arrayable
 {
     public function getFilename(): string;
     public function getMimeType(): string;

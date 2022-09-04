@@ -3,7 +3,6 @@
 namespace Spatie\DiscordAlerts;
 
 use Illuminate\Http\Exceptions\PostTooLargeException;
-use PhpParser\Node\Expr\AssignOp\Mul;
 use Spatie\DiscordAlerts\Messages\Multipart;
 use Spatie\DiscordAlerts\Messages\Text;
 
@@ -41,8 +40,7 @@ class DiscordAlert
                 ->add($text);
         } else {
             $message = (new Multipart())
-                ->add($text)
-                ->add($this->embeds);
+                ->add($text, ...$this->embeds);
         }
 
         $jobArguments = [
