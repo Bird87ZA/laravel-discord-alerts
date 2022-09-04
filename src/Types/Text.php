@@ -2,8 +2,10 @@
 
 namespace Spatie\DiscordAlerts\Types;
 
-class Text extends Message
+class Text implements Message
 {
+    protected string $fields;
+
     public function getHeaders(): array
     {
         return [
@@ -17,8 +19,15 @@ class Text extends Message
         return 'application/json';
     }
 
-    function __toString()
+    public function add(...$fields): self
     {
-        return json_encode($this->fields);
+        $this->fields = $fields[0];
+
+        return $this;
+    }
+
+    function __toString(): string
+    {
+        return $this->fields;
     }
 }

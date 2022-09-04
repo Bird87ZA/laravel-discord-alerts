@@ -38,7 +38,7 @@ class DiscordAlert
 
         if (empty($this->embed)) {
             $message = (new Text())
-                ->add(['content' => $text]);
+                ->add($text);
         } else {
             $message = (new Multipart())
                 ->add(['content' => $text])

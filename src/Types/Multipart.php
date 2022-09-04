@@ -2,14 +2,24 @@
 
 namespace Spatie\DiscordAlerts\Types;
 
-class Multipart extends Message
+class Multipart implements Message
 {
+    protected array $fields = [];
     protected string $boundary;
 
     public function __construct(array $fields = [], string $boundary = null)
     {
         $this->fields = $fields;
         $this->boundary = $boundary ?? '-----spatie-message-boundary';
+    }
+
+    public function add(...$fields): self
+    {
+        foreach ($fields as $field) {
+            $this->fields[] = $field;
+        }
+
+        return $this;
     }
 
     public function getHeaders(): array

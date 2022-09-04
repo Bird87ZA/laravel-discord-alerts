@@ -2,22 +2,13 @@
 
 namespace Spatie\DiscordAlerts\Types;
 
-abstract class Message
+interface Message
 {
-    protected array $fields = [];
+    public function getHeaders(): array;
 
-    abstract function getHeaders();
+    public function getContentType(): string;
 
-    abstract function getContentType();
+    public function __toString(): string;
 
-    abstract function __toString();
-
-    public function add(...$fields): self
-    {
-        foreach ($fields as $field) {
-            $this->fields[] = $field;
-        }
-
-        return $this;
-    }
+    public function add(...$fields): self;
 }
