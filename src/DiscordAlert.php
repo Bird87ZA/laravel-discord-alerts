@@ -41,7 +41,7 @@ class DiscordAlert
                 ->add($text);
         } else {
             $message = (new Multipart())
-                ->add(['content' => $text])
+                ->add($text)
                 ->add($this->embeds);
         }
 

@@ -39,25 +39,21 @@ class Multipart implements Message
 
     public function __toString(): string
     {
-        $body = '';
+        $body = $this->boundary . PHP_EOL;
+        $body .= 'Content-Disposition: form-data; name="payload_json"' . PHP_EOL;
+        $body .= 'Content-Type: application/json' . PHP_EOL;
+        $body .= json_encode($this->fields) . PHP_EOL;
+        $body .= $this->boundary . PHP_EOL;
 
         /** @var File $field */
-        foreach ($this->fields as $field) {
-            $body .= $this->boundary."\n";
-            $body .= sprintf("Content-Disposition: form-data; name=%s; filename=%s", $field->getName(), $field->getFilename());
-
-            $body .= "\n";
-
-//            if (isset($field['headers'])) {
-//                foreach ($field['headers'] as $header => $value) {
-//                    $body .= $header.': '.$value."\n";
-//                }
-//            }
-
-            $body .= "\n" . $field . "\n";
+        foreach ($this->fields as $key => $field) {
+            $body .= sprintf('Content-Disposition: form-data; name="files[%d]"; filename="%s"', $key, $field->getFilename());
+            $body .= sprintf('Content-Type: %s', $field->getMimeType());
+            $body .= $field . PHP_EOL;
+            $body .= $this->boundary . PHP_EOL;
         }
 
-        $body .= $this->boundary . "--\n";
+        $body .= $this->boundary . "--" . PHP_EOL;
 
         return $body;
     }
