@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use Spatie\DiscordAlerts\Types\Message;
+use Spatie\DiscordAlerts\Messages\Message;
 
 class SendToDiscordChannelJob implements ShouldQueue
 {

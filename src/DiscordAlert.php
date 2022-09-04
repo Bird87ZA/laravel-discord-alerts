@@ -4,8 +4,8 @@ namespace Spatie\DiscordAlerts;
 
 use Illuminate\Http\Exceptions\PostTooLargeException;
 use PhpParser\Node\Expr\AssignOp\Mul;
-use Spatie\DiscordAlerts\Types\Multipart;
-use Spatie\DiscordAlerts\Types\Text;
+use Spatie\DiscordAlerts\Messages\Multipart;
+use Spatie\DiscordAlerts\Messages\Text;
 
 class DiscordAlert
 {
@@ -36,7 +36,7 @@ class DiscordAlert
     {
         $webhookUrl = Config::getWebhookUrl($this->webhookUrlName);
 
-        if (empty($this->embed)) {
+        if (empty($this->embeds)) {
             $message = (new Text())
                 ->add($text);
         } else {

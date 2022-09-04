@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\DiscordAlerts\Types;
+namespace Spatie\DiscordAlerts\Messages;
 
 class Text implements Message
 {

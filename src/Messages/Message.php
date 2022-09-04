@@ -1,14 +1,12 @@
 <?php
 
-namespace Spatie\DiscordAlerts\Types;
+namespace Spatie\DiscordAlerts\Messages;
 
-interface Message
+interface Message extends \Stringable
 {
     public function getHeaders(): array;
 
     public function getContentType(): string;
-
-    public function __toString(): string;
 
     public function add(...$fields): self;
 }

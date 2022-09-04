@@ -1,6 +1,8 @@
 <?php
 
-namespace Spatie\DiscordAlerts\Types;
+namespace Spatie\DiscordAlerts\Messages;
+
+use Spatie\DiscordAlerts\Files\File;
 
 class Multipart implements Message
 {
@@ -39,26 +41,23 @@ class Multipart implements Message
     {
         $body = '';
 
+        /** @var File $field */
         foreach ($this->fields as $field) {
             $body .= $this->boundary."\n";
-            $body .= "Content-Disposition: form-data; name={$field['name']}";
-
-            if (isset($field['filename'])) {
-                $body .= "; filename={$field['filename']}";
-            }
+            $body .= sprintf("Content-Disposition: form-data; name=%s; filename=%s", $field->getName(), $field->getFilename());
 
             $body .= "\n";
 
-            if (isset($field['headers'])) {
-                foreach ($field['headers'] as $header => $value) {
-                    $body .= $header.': '.$value."\n";
-                }
-            }
+//            if (isset($field['headers'])) {
+//                foreach ($field['headers'] as $header => $value) {
+//                    $body .= $header.': '.$value."\n";
+//                }
+//            }
 
-            $body .= "\n".$field['content']."\n";
+            $body .= "\n" . $field . "\n";
         }
 
-        $body .= $this->boundary."--\n";
+        $body .= $this->boundary . "--\n";
 
         return $body;
     }
